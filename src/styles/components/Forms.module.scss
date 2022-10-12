@@ -1,3 +1,5 @@
+@import "@styles/vars";
+
 .form_title {
   font-size: 3rem;
 }
@@ -7,9 +9,21 @@
     & .fields_container {
       display: grid;
     grid-template-columns: 1fr 1fr;
-    max-width: 500px;
+    max-width: 584px;
     column-gap: 10px;
     row-gap: 20px;
+    width: 100%;
+    }
+
+    & button {
+      margin-top: 20px;
+      width: 40%;
+      background-color: $terciary;
+      color: #fefefe;
+    
+      &:hover {
+        color: #000000;
+      } 
     }
 
     & label {

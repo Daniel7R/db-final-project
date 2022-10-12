@@ -20,9 +20,24 @@ const EspecialidadesForm = () => {
 
     const isNombreError = fields.nombre_especialidad === ''
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Submitting");
+        const data = new FormData();
+
+        data.append("name", fields.nombre_especialidad)
+
+
+        await fetch(`${process.env.NEXT_PUBLIC_API}/specialities`, {
+            method: "POST",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": "true"
+            },
+            body: data
+        })
+            .then(response => response.json())
+            .then(response => console.log(response))
+            .catch(err => console.log(err))
     }
 
     return (
@@ -34,7 +49,9 @@ const EspecialidadesForm = () => {
                     <Input type={"text"} onChange={e => setFields({ ...fields, nombre_especialidad: e.target.value })} />
                     {isNombreError && <FormErrorMessage>El profesor es requerido</FormErrorMessage>}
                 </FormControl>
-                <Button type="submit" variant={"outline"}><PlusSquareIcon />Agregar</Button>
+                <div style={{ "width": "100%", textAlign: "center" }}>
+                    <Button type="submit" size={"lg"} variant={"outline"}><PlusSquareIcon />Agregar</Button>
+                </div>
             </form>
         </>
     );

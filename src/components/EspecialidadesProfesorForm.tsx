@@ -16,15 +16,47 @@ interface FieldsEspecialidadesProfesores {
     id_especialidad: string
 }
 
-
+interface Profe {
+    id_profesor: string,
+    nombre: string,
+    apellido: string,
+    edad: number
+}
 
 const EspecialidadesProfesorForm = () => {
-    const [profesores, setProfesores] = useState<Profesores[]>([])
+    const [profesores, setProfesores] = useState<Profe[]>([])
     const [especialidades, setEspecialidades] = useState<Especialidades[]>([])
     const [fields, setFields] = useState<FieldsEspecialidadesProfesores>({
         id_profesor: '',
         id_especialidad: ''
     });
+
+    useEffect(() => {
+        setProfesores([]);
+        setEspecialidades([]);
+        (async () => {
+            await fetch(`${process.env.NEXT_PUBLIC_API}/teachers`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(response => setProfesores(response.data))
+                .catch(e => console.log(e))
+        })();
+        (async () => {
+            await fetch(`${process.env.NEXT_PUBLIC_API}/specialities`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(response => setEspecialidades(response.data))
+                .catch(e => console.log(e))
+        })();
+    }, [])
 
     const handleTeacherSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFields({
@@ -43,14 +75,26 @@ const EspecialidadesProfesorForm = () => {
     const isProfeError = fields.id_especialidad === ''
     const isEspecialidadError = fields.id_profesor === ''
 
-    useEffect(() => {
-
-    }, [])
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Submitting");
+        const data = new FormData();
+
+        data.append("id_profesor", fields.id_profesor)
+        data.append("id_especialidad", fields.id_especialidad)
+
+        await fetch(`${process.env.NEXT_PUBLIC_API}/teacher-speciality`, {
+            method: "POST",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": "true"
+            },
+            body: data
+        })
+            .then(response => response.json())
+            .then(response => console.log(response))
+            .catch(err => console.log(err))
     }
+    console.log(profesores)
 
     return (
         <>
@@ -60,9 +104,9 @@ const EspecialidadesProfesorForm = () => {
                     <FormLabel>Profesor</FormLabel>
                     <Select placeholder='Selecciona un profesor' onChange={handleTeacherSelection}>
                         {
-                            profesores.map((profesor, i) => {
+                            profesores.length > 0 && profesores.map((profesor, i) => {
                                 return (
-                                    <option key={i} value={profesor?.id_profesor}>{profesor?.nombre}</option>
+                                    <option key={i} value={profesor?.id_profesor}>{profesor?.nombre} {profesor?.apellido}</option>
                                 )
                             })
                         }
@@ -71,7 +115,7 @@ const EspecialidadesProfesorForm = () => {
                 </FormControl>
                 <FormControl isRequired >
                     <FormLabel>Especialidad</FormLabel>
-                    <Select placeholder='Selecciona un profesor' onChange={handleTeacherSelection}>
+                    <Select placeholder='Selecciona una especialidad' onChange={handleSpecialitySelection}>
                         {
                             especialidades.map((especialidad, i) => {
                                 return (
@@ -82,7 +126,9 @@ const EspecialidadesProfesorForm = () => {
                     </Select>
                     {isEspecialidadError && <FormErrorMessage>La especialidad es requerida</FormErrorMessage>}
                 </FormControl>
-                <Button type="submit" variant={"outline"}><PlusSquareIcon /> Agregar</Button>
+                <div style={{ "width": "100%", textAlign: "center" }}>
+                    <Button type="submit" size={"lg"} variant={"outline"}><PlusSquareIcon /> Agregar</Button>
+                </div>
             </form>
         </>
     );

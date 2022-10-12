@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 
-
 import Styles from "@styles/components/Forms.module.scss"
 
 const SedesForm = () => {
@@ -20,9 +19,24 @@ const SedesForm = () => {
   const isNameError = fields.nombre === ''
   const isCityError = fields.ciudad === ''
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting");
+    const data = new FormData();
+
+    data.append("name", fields.nombre)
+    data.append("city", fields.ciudad)
+
+    await fetch(`${process.env.NEXT_PUBLIC_API}/sedes`, {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true"
+      },
+      body: data
+    })
+      .then(response => response.json())
+      .then(response => console.log(response))
+      .catch(err => console.log(err))
   }
 
   return (
@@ -38,7 +52,9 @@ const SedesForm = () => {
         <Input type={"text"} onChange={e => setFields({ ...fields, ciudad: e.target.value })} />
         {isCityError === true && <FormErrorMessage>La ciudad es requerida</FormErrorMessage>}
       </FormControl>
-      <Button type="submit" variant={"outline"}><PlusSquareIcon /> Agregar</Button>
+      <div style={{ "width": "100%", textAlign: "center" }}>
+        <Button type="submit" size={"lg"} variant={"outline"}><PlusSquareIcon /> Agregar</Button>
+      </div>
     </form>
   );
 };

@@ -1,8 +1,10 @@
 import React from 'react'
 
+import { ClassesForm } from '@components/.'
+
 const classes = () => {
     return (
-        <div>classes</div>
+        <ClassesForm />
     )
 }
 
