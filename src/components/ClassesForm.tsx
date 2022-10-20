@@ -5,11 +5,13 @@ import {
     FormErrorMessage,
     Input,
     Button,
-    Select
+    Select,
+    useDisclosure
 } from "@chakra-ui/react";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 
 import Styles from "@styles/components/Forms.module.scss"
+import { SuccessAlert } from './SuccessAlert';
 
 interface Clases {
     id_profesor: string,
@@ -38,6 +40,9 @@ const ClassesForm = () => {
         nombre_clase: ''
     });
 
+    const { isOpen, onOpen, onClose } = useDisclosure({
+        defaultIsOpen: false
+    });
 
     const isProfeError = fields.id_sede === ''
     const isSedeError = fields.id_profesor === ''
@@ -105,66 +110,73 @@ const ClassesForm = () => {
             body: data
         })
             .then(response => response.json())
-            .then(response => console.log(response))
+            .then(() => onOpen())
+            .then(() => setFields({ nombre_clase: "", id_profesor: "", id_sede: "", horario_inicio: "", horario_fin: "" }))
+            .then(() => setTimeout(() => onClose(), 2000))
             .catch(err => console.log(err))
 
     }
 
     return (
-        <div style={{ maxWidth: "700px", margin: "0 auto" }}>
-            <form className={Styles.formTeachers} onSubmit={(event: React.FormEvent) => handleSubmit(event)}>
-                <h2 className={Styles.form_title} style={{ textAlign: "center" }}>Programar Clase</h2>
-                <div className={Styles.fields_container} style={{ margin: "0 auto" }}>
-                    <FormControl isRequired >
-                        <FormLabel>Profesor</FormLabel>
-                        <Select placeholder='Selecciona un profesor' onChange={handleTeacherSelection}>
-                            {
-                                profesores.length > 0 && profesores.map((profesor, i) => {
-                                    return (
-                                        <option key={i} value={profesor?.id_profesor}>{profesor?.nombre} {profesor?.apellido}</option>
-                                    )
-                                })
-                            }
-                        </Select>
-                        {isProfeError && <FormErrorMessage>El profesor es requerido</FormErrorMessage>}
-                    </FormControl>
+        <>
+            {
+                isOpen && <SuccessAlert onClose={onClose} type={"Clase"} />
+            }
+            <div style={{ maxWidth: "700px", margin: "0 auto" }}>
+                <form className={Styles.formTeachers} onSubmit={(event: React.FormEvent) => handleSubmit(event)}>
+                    <h2 className={Styles.form_title} style={{ textAlign: "center" }}>Programar Clase</h2>
+                    <div className={Styles.fields_container} style={{ margin: "0 auto" }}>
+                        <FormControl isRequired >
+                            <FormLabel>Profesor</FormLabel>
+                            <Select placeholder='Selecciona un profesor' onChange={handleTeacherSelection}>
+                                {
+                                    profesores.length > 0 && profesores.map((profesor, i) => {
+                                        return (
+                                            <option key={i} value={profesor?.id_profesor}>{profesor?.nombre} {profesor?.apellido}</option>
+                                        )
+                                    })
+                                }
+                            </Select>
+                            {isProfeError && <FormErrorMessage>El profesor es requerido</FormErrorMessage>}
+                        </FormControl>
 
-                    <FormControl isRequired >
-                        <FormLabel>Sede</FormLabel>
-                        <Select placeholder='Selecciona una especialidad' onChange={handleSedeSelection}>
-                            {
-                                sedes.map((sede, i) => {
-                                    return (
-                                        <option key={i} value={sede?.id_sede}>{sede?.nombre}, {sede?.ciudad}</option>
-                                    )
-                                })
-                            }
-                        </Select>
-                        {isSedeError && <FormErrorMessage>La especialidad es requerida</FormErrorMessage>}
-                    </FormControl>
+                        <FormControl isRequired >
+                            <FormLabel>Sede</FormLabel>
+                            <Select placeholder='Selecciona una especialidad' onChange={handleSedeSelection}>
+                                {
+                                    sedes.map((sede, i) => {
+                                        return (
+                                            <option key={i} value={sede?.id_sede}>{sede?.nombre}, {sede?.ciudad}</option>
+                                        )
+                                    })
+                                }
+                            </Select>
+                            {isSedeError && <FormErrorMessage>La especialidad es requerida</FormErrorMessage>}
+                        </FormControl>
 
-                    <FormControl isRequired >
-                        <FormLabel>Horario de inicio</FormLabel>
-                        <Input type={"datetime-local"} onChange={(e) => setFields({ ...fields, horario_inicio: e.target.value })} />
-                        {isHorarioInicioError && <FormErrorMessage>La especialidad es requerida</FormErrorMessage>}
-                    </FormControl>
+                        <FormControl isRequired >
+                            <FormLabel>Horario de inicio</FormLabel>
+                            <Input type={"datetime-local"} onChange={(e) => setFields({ ...fields, horario_inicio: e.target.value })} />
+                            {isHorarioInicioError && <FormErrorMessage>La especialidad es requerida</FormErrorMessage>}
+                        </FormControl>
 
-                    <FormControl isRequired >
-                        <FormLabel>Horario de finalización</FormLabel>
-                        <Input type={"datetime-local"} onChange={(e) => setFields({ ...fields, horario_fin: e.target.value })} />
-                        {isHorarioFinError && <FormErrorMessage>La especialidad es requerida</FormErrorMessage>}
-                    </FormControl>
-                    <FormControl isRequired >
-                        <FormLabel>Nombre de la clase</FormLabel>
-                        <Input type={"text"} onChange={(e) => setFields({ ...fields, nombre_clase: e.target.value })} />
-                        {isNombreError && <FormErrorMessage>La especialidad es requerida</FormErrorMessage>}
-                    </FormControl>
-                </div>
-                <div style={{ "width": "100%", textAlign: "center" }}>
-                    <Button type="submit" size={"lg"} variant={"outline"}><PlusSquareIcon /> Agregar</Button>
-                </div>
-            </form>
-        </div>
+                        <FormControl isRequired >
+                            <FormLabel>Horario de finalización</FormLabel>
+                            <Input type={"datetime-local"} onChange={(e) => setFields({ ...fields, horario_fin: e.target.value })} />
+                            {isHorarioFinError && <FormErrorMessage>La especialidad es requerida</FormErrorMessage>}
+                        </FormControl>
+                        <FormControl isRequired >
+                            <FormLabel>Nombre de la clase</FormLabel>
+                            <Input type={"text"} value={fields.nombre_clase} onChange={(e) => setFields({ ...fields, nombre_clase: e.target.value })} />
+                            {isNombreError && <FormErrorMessage>La especialidad es requerida</FormErrorMessage>}
+                        </FormControl>
+                    </div>
+                    <div style={{ "width": "100%", textAlign: "center" }}>
+                        <Button type="submit" size={"lg"} variant={"outline"}><PlusSquareIcon /> Agregar</Button>
+                    </div>
+                </form>
+            </div>
+        </>
     )
 }
 

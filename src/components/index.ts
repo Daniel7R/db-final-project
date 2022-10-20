@@ -6,3 +6,4 @@ export { EspecialidadesForm } from "./EspecialidadesForm";
 export { Header } from "./Header";
 export { Footer } from "./Footer";
 export { ClassesForm } from "./ClassesForm";
+export { ProfesoresInfo } from "./ProfesoresInfo";

@@ -13,3 +13,10 @@ interface Sedes {
   nombre: string;
   ciudad: string;
 }
+
+interface ProfesoresEspecialidades {
+  identificacion: number;
+  nombre_profesor: string;
+  apellido_profesor: string;
+  especialidades: string[];
+}

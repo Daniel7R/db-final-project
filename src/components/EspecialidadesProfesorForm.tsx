@@ -5,10 +5,12 @@ import {
     FormErrorMessage,
     Input,
     Button,
-    Select
+    Select,
+    useDisclosure
 } from "@chakra-ui/react";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 
+import { SuccessAlert } from './SuccessAlert';
 import Styles from "@styles/components/Forms.module.scss"
 
 interface FieldsEspecialidadesProfesores {
@@ -29,6 +31,10 @@ const EspecialidadesProfesorForm = () => {
     const [fields, setFields] = useState<FieldsEspecialidadesProfesores>({
         id_profesor: '',
         id_especialidad: ''
+    });
+
+    const { isOpen, onOpen, onClose } = useDisclosure({
+        defaultIsOpen: false
     });
 
     useEffect(() => {
@@ -68,7 +74,7 @@ const EspecialidadesProfesorForm = () => {
     const handleSpecialitySelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFields({
             ...fields,
-            id_profesor: e.target.value
+            id_especialidad: e.target.value
         })
     }
 
@@ -91,13 +97,17 @@ const EspecialidadesProfesorForm = () => {
             body: data
         })
             .then(response => response.json())
-            .then(response => console.log(response))
+            .then(() => onOpen())
+            .then(() => setFields({ id_especialidad: "", id_profesor: "" }))
+            .then(() => setTimeout(() => onClose(), 2000))
             .catch(err => console.log(err))
     }
     console.log(profesores)
 
     return (
-        <>
+        <> {
+            isOpen && <SuccessAlert onClose={onClose} type="Especialidad asignada" />
+        }
             <form className={Styles.formTeachers} onSubmit={(event: React.FormEvent) => handleSubmit(event)}>
                 <h2 className={Styles.form_title}>Especialidad Profesor</h2>
                 <FormControl isRequired >
