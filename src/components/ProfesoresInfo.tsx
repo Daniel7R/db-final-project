@@ -21,7 +21,7 @@ export const ProfesoresInfo = () => {
         <>
             <Box w="100%" pt={10} style={{ marginBottom: "250px" }} >
                 {
-                    profesoresEspecialidades.length > 0 && (
+                    profesoresEspecialidades.length !== 0 && (
                         profesoresEspecialidades.map((profesor) => {
                             return (
                                 <Center key={profesor.identificacion} style={{ fontSize: "2.5rem", display: "flex", flexDirection: "column", marginBottom: "15px" }}>
