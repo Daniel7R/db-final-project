@@ -14,7 +14,7 @@ export const ProfesoresInfo = () => {
                 .then(response => setProfesoresEspecialidades(response.data))
                 .catch(e => console.error(e));
         })();
-    }, [profesoresEspecialidades])
+    }, [])
 
 
     return (
