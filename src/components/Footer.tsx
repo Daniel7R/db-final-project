@@ -6,28 +6,27 @@ import Styles from "@styles/components/Footer.module.scss";
 export const Footer = () => {
     return (
         <footer className={Styles.footerContainer}>
-            <div className={Styles.icons}>Aquí van los iconos que querramos</div>
+            <div className={Styles.icons}>El lugal perfecto para tu mente y cuerpo</div>
             <div className={Styles.divider}></div>
             <div className={Styles.gridContainer}>
                 <div className={Styles.gridItem}>
                     <h3 className={Styles.itemTitle}>Gym Fit</h3>
                     <div className={Styles.itemContent}>
-                        <span><StarIcon /> Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
+                        <span><StarIcon />Para tener éxito, en primer lugar debemos creer que podemos</span>
                     </div>
                 </div>
                 <div className={Styles.gridItem}>
-                    <h3 className={Styles.itemTitle}>Useful</h3>
+                    <h3 className={Styles.itemTitle}>Necesitas ayuda?</h3>
                     <div className={Styles.itemContent}>
-                        <span><SettingsIcon /> Settings</span>
-                        <span><ExternalLinkIcon /> Help</span>
+                        <span><ExternalLinkIcon /> Ayuda</span>
                         <span></span>
                     </div>
                 </div>
                 <div className={Styles.gridItem}>
-                    <h3 className={Styles.itemTitle}>Contact</h3>
+                    <h3 className={Styles.itemTitle}>Contáctanos</h3>
                     <div className={Styles.itemContent}>
-                        <span ><EmailIcon /> user@example.com</span>
-                        <span><PhoneIcon />  +57 3000000032</span>
+                        <span ><EmailIcon /> gymFit034@gmail.com</span>
+                        <span><PhoneIcon />  +57 3023251286</span>
                     </div>
                 </div>
             </div>

@@ -171,7 +171,7 @@ const ClassesForm = () => {
                             {isNombreError && <FormErrorMessage>La especialidad es requerida</FormErrorMessage>}
                         </FormControl>
                     </div>
-                    <div style={{ "width": "100%", textAlign: "center" }}>
+                    <div style={{ "width": "200%", textAlign: "center" }}>
                         <Button type="submit" size={"lg"} variant={"outline"}><PlusSquareIcon /> Agregar</Button>
                     </div>
                 </form>
