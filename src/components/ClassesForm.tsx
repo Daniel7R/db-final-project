@@ -95,8 +95,8 @@ const ClassesForm = () => {
         e.preventDefault();
         const data = new FormData();
 
-        data.append("id_profesor", fields.id_profesor)
         data.append("id_sede", fields.id_sede)
+        data.append("id_profesor", fields.id_profesor)
         data.append("horario_inicio", fields.horario_inicio)
         data.append("horario_fin", fields.horario_fin)
         data.append("nombre_clase", fields.nombre_clase)
@@ -110,7 +110,7 @@ const ClassesForm = () => {
             body: data
         })
             .then(response => response.json())
-            .then(() => onOpen())
+            .then((r) => r?.status === 'done' && onOpen())
             .then(() => setFields({ nombre_clase: "", id_profesor: "", id_sede: "", horario_inicio: "", horario_fin: "" }))
             .then(() => setTimeout(() => onClose(), 2000))
             .catch(err => console.log(err))

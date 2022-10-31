@@ -1,10 +1,13 @@
 import React from 'react'
 
-import { ClassesForm } from '@components/.'
+import { ClassesForm, Seo } from '@components/.'
 
 const classes = () => {
     return (
-        <ClassesForm />
+        <>
+            <Seo title='Programar clase' />
+            <ClassesForm />
+        </>
     )
 }
 
